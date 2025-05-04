@@ -4,13 +4,13 @@ from rest_framework.validators import UniqueValidator
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 
-from posts.models import Post
+from posts.models import Post,Like
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     class Meta:
         model = Post
-        fields = ['url', 'id', 'owner','contents']
+        fields = ['url', 'id', 'owner','contents','like_count']
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -33,3 +33,15 @@ class RegistrationSerializer(serializers.ModelSerializer):
         )
         return user
 
+class LikeSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source='user.username')  
+    class Meta:
+        model = Like  
+        fields = ['id', 'user', 'post']  
+        read_only_fields = ['post'] 
+
+    def create(self,request):
+        user = self.context['request'].user
+        post = self.context.get('post')
+        return Like.objects.create(post=post,user=user)
+    
