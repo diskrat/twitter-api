@@ -8,9 +8,10 @@ router = DefaultRouter()
 router.register(r'posts', views.PostViewSet)
 router.register(r'users', views.UserViewSet)
 router.register(r'register',views.RegistrationViewSet,basename='register')
+router.register(r'follows',views.FollowViewSet,basename='follow')
 
 posts_router = NestedDefaultRouter(router,r'posts',lookup='post')
-posts_router.register(r'likes',views.LikeViewSet)
+posts_router.register(r'like',views.LikeViewSet)
 
 # The API URLs are now determined automatically by the router.
 urlpatterns = [

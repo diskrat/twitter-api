@@ -4,7 +4,7 @@ from rest_framework.validators import UniqueValidator
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 
-from posts.models import Post,Like
+from posts.models import Post,Like,Follow
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
@@ -45,3 +45,9 @@ class LikeSerializer(serializers.ModelSerializer):
         post = self.context.get('post')
         return Like.objects.create(post=post,user=user)
     
+class FollowSerializer(serializers.ModelSerializer):
+    following = serializers.ReadOnlyField(source='following.username')
+    follower = serializers.ReadOnlyField(source='follower.username')
+    class Meta:
+        model = Follow
+        fields = ['id','following','follower']

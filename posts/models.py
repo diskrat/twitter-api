@@ -26,3 +26,8 @@ class Like(models.Model):
         super().delete(*args,**kwargs)
         self.post.like_count-=1
         
+class Follow(models.Model):
+    following = models.ForeignKey(User,on_delete=models.CASCADE,related_name='following')
+    follower = models.ForeignKey(User,on_delete=models.CASCADE,related_name='follower')
+    class Meta:
+        unique_together = ('following','follower')
